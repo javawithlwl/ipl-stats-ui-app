@@ -1,22 +1,27 @@
-
+var jwt = localStorage.getItem("token");
+if (jwt == null) {
+  window.location.href = "./login.html";
+}
 const teamSelectId = document.querySelector("#teamSelectId");
 const amountStatChart = document.querySelector("#amountStatChart");
 const roleAmountChart = document.querySelector("#roleAmountChart");
 const playerData = document.querySelector("#playerData");
-const baseUrl = "https://iplstats.onrender.com/iplstats/api/v1";
+const baseUrl = "http://localhost:8090/iplstats/api/v1";
 
 google.charts.load('current', {'packages':['corechart']});
 
 
 function showTeamAmountStats(){
-    fetch(`${baseUrl}/stats/team-stats`).then(res=>res.json()).then(data=>{
+    var requestOptions = getHeaders('GET');
+    fetch(`${baseUrl}/stats/team-stats`, requestOptions).then(res=>res.json()).then(data=>{
         drawColumnChart(data);
     }).catch(error=>{
         console.log(error);
     })
 }
 function showRoleAmountStats(){
-    fetch(`${baseUrl}/stats/role-stats`).then(res=>res.json()).then(data=>{
+    var requestOptions = getHeaders('GET');
+    fetch(`${baseUrl}/stats/role-stats`,requestOptions).then(res=>res.json()).then(data=>{
         google.charts.setOnLoadCallback(drawPieChart(data));
    }).catch(error=>{
        console.log(error);
@@ -24,8 +29,8 @@ function showRoleAmountStats(){
 }
 
 function initTeamBasicDetails(){
-   
-        fetch(`${baseUrl}/team/basic-details`).then(res=>res.json()).then(data=>{
+    var requestOptions = getHeaders('GET');
+        fetch(`${baseUrl}/team/basic-details`,requestOptions).then(res=>res.json()).then(data=>{
             let teamBasicDetails = data;
             showDropdownValues(teamBasicDetails);
         }).catch(error=>{
@@ -48,7 +53,8 @@ function showDropdownValues(teamBasicDetails){
 function showPlayerDetails(){
     let teamId= document.querySelector('#selectedTeamId').value;
     if(teamId !== ""){
-        fetch(`${baseUrl}/team/${teamId}/players`).then(res=>res.json()).then(data=>{
+        var requestOptions = getHeaders('GET')
+        fetch(`${baseUrl}/team/${teamId}/players`,requestOptions).then(res=>res.json()).then(data=>{
             viewPlayerDetails(data);
         }).catch(error=>{
             console.log(error);
@@ -109,4 +115,16 @@ function drawColumnChart(statData) {
     };
     var chart = new google.visualization.ColumnChart(document.getElementById('amountStatChart'));
     chart.draw(data, options);
+}
+
+function getHeaders(method){
+    var myHeaders = new Headers();
+    myHeaders.append('Content-Type','application/json');
+    myHeaders.append('Authorization','Bearer '+localStorage.getItem('token'));
+    console.log("{}",localStorage.getItem('token'))
+    var requestOptions = {
+        method: method,
+        headers: myHeaders
+     };
+     return requestOptions;
 }
