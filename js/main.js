@@ -6,7 +6,7 @@ const teamSelectId = document.querySelector("#teamSelectId");
 const amountStatChart = document.querySelector("#amountStatChart");
 const roleAmountChart = document.querySelector("#roleAmountChart");
 const playerData = document.querySelector("#playerData");
-const baseUrl = "http://localhost:8090/iplstats/api/v1";
+const baseUrl = "https://iplstats.onrender.com/iplstats/api/v1";
 
 google.charts.load('current', {'packages':['corechart']});
 
