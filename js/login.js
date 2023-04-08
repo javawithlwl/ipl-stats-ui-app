@@ -20,7 +20,7 @@ function login() {
       body: raw
     };
     
-    fetch("http://localhost:8090/iplstats/api/auth/login", requestOptions)
+    fetch("https://iplstats.onrender.com/iplstats/api/auth/login", requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result);
